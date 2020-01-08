@@ -6,7 +6,13 @@ const cors = require("cors")
 const app = express()
 const port = 3001
 
-app.options('*', cors())
+app.options('*', cors(), async (req, res) => {
+    res.set("Access-Control-Allow-Origin", "*")
+    res.set("Access-Control-Allow-Methods", ["POST", "OPTIONS"])
+    res.set("Access-Control-Allow-Headers",
+        ["Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"])
+    res.send()
+})
 app.get('/meta_info', cors(), async (req, res) => {
     console.log(req.headers)
     let headers = req.headers
@@ -22,6 +28,10 @@ app.get('/meta_info', cors(), async (req, res) => {
         })
         .then(d => {
             res.set("test", "test")
+            res.set("Access-Control-Allow-Origin", "*")
+            res.set("Access-Control-Allow-Methods", ["POST", "OPTIONS"])
+            res.set("Access-Control-Allow-Headers",
+                ["Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"])
             res.send({ img_arr: d, album_info: out[0] })
         })
 
