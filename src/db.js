@@ -1,4 +1,3 @@
-//STOP USING LOKI!!!!!! USE FUCKING NEDB
 const Datastore = require("nedb")
 
 export default class DBManager {
