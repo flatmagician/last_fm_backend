@@ -85,7 +85,14 @@ async function fetchData(artistUrl) {
 
     let $ = cheerio.load(result.data);
     let links = $('.image-list-item-wrapper a img')
-    let imgUrl = links[0].attribs.src
+    let imgUrl
+    if (links[0] != null && links[0].hasOwnProperty("attribs")) {
+        imgUrl = links[0].attribs.src
+    }
+    else {
+        imgUrl = null
+    }
+
 
     const wiki_result = await axios.get(`${artistUrl}/+wiki/`)
 
