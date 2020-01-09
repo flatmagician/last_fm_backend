@@ -61,7 +61,7 @@ app.get('/meta_info', cors(), (req, res) => {
                     bios_complete.forEach((bio, index) => {
                         if (bio.stored === false) {
                             const info = out[0][index]
-                            if (bio.bio == undefined) {
+                            if (!bio.hasOwnProperty("bio")) {
                                 entries.push({
                                     artist: info.artist,
                                     imgUrl: null,
