@@ -4,7 +4,7 @@ const cheerio = require("cheerio");
 const cors = require("cors")
 
 const app = express()
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.options('*', cors(), async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -14,19 +14,20 @@ app.options('*', cors(), async (req, res) => {
     res.send()
 })
 app.get('/meta_info', cors(), async (req, res) => {
-    console.log(req.headers)
     let headers = req.headers
     request = new Request(headers.user, headers.category, headers.period, headers.rows, headers.cols)
     let out = []
-    album_info = request.getResponse()
+    request.getResponse()
         .then(collage_info => {
             out.push(collage_info)
+            // console.log(collage_info)
             return Promise.all(collage_info.map(
                 (elm) => {
                     return fetchData(elm.artist.url)
                 }))
         })
         .then(d => {
+            // console.log(d)
             res.header("test", "test")
             res.header("Access-Control-Allow-Origin", "*")
             res.header("Access-Control-Allow-Methods", ["POST", "OPTIONS"])
@@ -37,29 +38,8 @@ app.get('/meta_info', cors(), async (req, res) => {
 
 })
 
-
-
-//console.log(collage_info.then(d => console.log(d)))
-//console.log(await (collage_info))
-
-// .reduce((prev, next) => {
-//     prev.push(next)
-// }, [])
-
-//console.log(await albumData)
-
-
-// albumData = await request.map(element => {
-//     return fetchData(element.artist.url)
-// });
-// res.send({
-//     albumData,
-//     request
-// })
-
 app.get('/album_info', async (req, res) => {
     let headers = req.headers
-    console.log("headers: ", headers)
     fetchData(headers.artist_url)
         .catch((err) => Promise.reject(err).then(console.log(err)).then(res.send(err)))
         .then(
@@ -77,15 +57,6 @@ class Request {
             artists: "getTopArtists",
             tracks: "getTopTracks"
         }
-
-        this.period_options = {
-            overall: "overall",
-            seven_day: "7day",
-            one_month: "1month",
-            three_months: "3month",
-            six_months: "6month",
-            year: "12month"
-        };
 
         this.user = user;
         this.category = this.category_options[category];
