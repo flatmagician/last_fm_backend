@@ -61,11 +61,20 @@ app.get('/meta_info', cors(), (req, res) => {
                     bios_complete.forEach((bio, index) => {
                         if (bio.stored === false) {
                             const info = out[0][index]
-                            entries.push({
-                                artist: info.artist,
-                                imgUrl: bio.bio.imgUrl,
-                                bioText: bio.bio.bioText
-                            })
+                            if (bio.bio == undefined) {
+                                entries.push({
+                                    artist: info.artist,
+                                    imgUrl: null,
+                                    bioText: null
+                                })
+                            }
+                            else {
+                                entries.push({
+                                    artist: info.artist,
+                                    imgUrl: bio.bio.imgUrl,
+                                    bioText: bio.bio.bioText
+                                })
+                            }
                         }
                     })
                     entries.forEach((entry) => {
